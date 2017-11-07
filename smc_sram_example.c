@@ -128,6 +128,7 @@ static void configure_console(void)
 #define DMA_BUF_SIZE    8192
 //int num_samples_to_sample = 65535;
 int num_samples_to_sample = 8192;
+//int num_samples_to_sample = 8191;
 
 
 /** DMA buffer. */
@@ -144,16 +145,7 @@ int state = 0;
 
 void start_sampling(){
 	uint32_t i;
-	uint32_t cfg;
 	dma_transfer_descriptor_t desc;
-	pmc_enable_periph_clk(ID_DMAC);
-	dmac_init(DMAC);
-	dmac_set_priority_mode(DMAC, DMAC_PRIORITY_ROUND_ROBIN);
-	dmac_enable(DMAC);
-	cfg =	DMAC_CFG_SOD_ENABLE |        /** Enable stop on done */
-			DMAC_CFG_AHB_PROT(1) |     /** Set AHB Protection */
-			DMAC_CFG_FIFOCFG_ALAP_CFG; /** FIFO Configuration */
-	dmac_channel_set_configuration(DMAC, DMA_CH, cfg);
 	desc.ul_source_addr = (uint32_t) 0x400E0E00 + 0x003C;
 	desc.ul_destination_addr = (uint32_t) g_dma_buf;
 	
@@ -187,14 +179,15 @@ uint16_t get_16_pin_inputs(uint32_t sampled_int){
 }
 
 void print_uint16_binary(uint16_t pinValues){
-	uint8_t i;
-	for(i = 15; i >= 0; i--){
-		printf("%d",(pinValues>>i) & 1);
+	int8_t i;
+	for(i = 0; i <16; i++){
+		printf("%d",~(pinValues>>i) & 1);
 	}
-	printf(" ");
+	return;
 }
 
 void embedded_controller(){
+	state = 0;
 	int i;
 	int done = 0;
 	while(!done){
@@ -254,6 +247,7 @@ void embedded_controller(){
 				for(; i < NUM_SAMPLES; i++){
 					int changed_vals = (sample_array[i - 1] ^ sample_array[i]); // 1 wherever there was a transition
 					int j = 0;
+					//if not equal
 					//go through each channel to check if it changed, store new value
 					for(; j < 16; j++){
 						if((changed_vals>>j) & 1){
@@ -268,13 +262,33 @@ void embedded_controller(){
 				state = 3;
 				break;
 			case 3:
+			/*
+				for(i = 0; i < num_samples_to_sample; i++){
+					printf("%d ", (g_dma_buf[i]>>11) & 1);
+					//print_uint16_binary(g_sampledpins_buf[i]);
+				}
+				*/
 				//grab relevant numbers from 32 sampled pins
 				for(i = 0; i < num_samples_to_sample; i++){
-					g_sampledpins_buf[i] = get_16_pin_inputs(g_dma_buf[i])
+					g_sampledpins_buf[i] = get_16_pin_inputs(g_dma_buf[i]);
 				}
+				/*
 				for(i = 0; i < num_samples_to_sample; i++){
-					print_uint16_binary(g_sampledpins_buf[i]);
+					printf("%d", ~(g_sampledpins_buf[i]>>4) & 1);
+					printf("%d", ~(g_sampledpins_buf[i]>>5) & 1);
+					printf("%d", ~(g_sampledpins_buf[i]>>6) & 1);
+					printf("%d", ~(g_sampledpins_buf[i]>>7) & 1);
+					//print_uint16_binary(g_sampledpins_buf[i]);
+					printf("\r\n");
 				}
+				*/
+				
+				for(i = 0; i < num_samples_to_sample; i += 64){
+					char a = ~(char)g_sampledpins_buf[i];
+					char b = ~(char)g_sampledpins_buf[i]>>8;
+					printf("%c%c",b,a);
+				}
+				
 				done = 1;
 				break;
 			
@@ -393,15 +407,42 @@ int main(void)
 	/* Set up analog current */
 	dacc_set_analog_control(DACC_BASE, DACC_ANALOG_CONTROL);
 	
+	
+	
 	// max val is DACC_MAX_DATA
 	// set the 3.3 here to change output voltage
-	dacc_write_conversion_data(DACC_BASE, (uint32_t)(DACC_MAX_DATA * 3.3 / 3.3));	
+	dacc_write_conversion_data(DACC_BASE, (uint32_t)(DACC_MAX_DATA * 1.9 / 3.3));
+	
+	
+	// DMA config
+	uint32_t cfg;
+	pmc_enable_periph_clk(ID_DMAC);
+	dmac_init(DMAC);
+	dmac_set_priority_mode(DMAC, DMAC_PRIORITY_ROUND_ROBIN);
+	dmac_enable(DMAC);
+	cfg =	DMAC_CFG_SOD_ENABLE |        /** Enable stop on done */
+			DMAC_CFG_AHB_PROT(1) |     /** Set AHB Protection */
+			DMAC_CFG_FIFOCFG_ALAP_CFG; /** FIFO Configuration */
+	dmac_channel_set_configuration(DMAC, DMA_CH, cfg);
+	
+
+	char uc_key[1000];
 	
 	initialize_pins();
 	int prevValue = 0;
 	while (1) {
-		wait_for_button();
-		embedded_controller();
+			
+		int numchars = 0;
+		uc_key[0] = ' ';
+		while(numchars == 0 || uc_key[numchars-1] != ';'){
+			usart_serial_getchar((Usart *)CONSOLE_UART, uc_key + numchars);
+			numchars ++;
+		}
+		uc_key[numchars] = '\0';
+		printf("%s",uc_key);
+		printf("no more data || no more data || no more data");
+		//wait_for_button();
+		//embedded_controller();
 	}
 	
 
