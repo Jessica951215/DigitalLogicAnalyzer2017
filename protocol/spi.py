@@ -17,11 +17,14 @@ def printReading(reading):
         str((reading >> 2) & 0b1) +
         str((reading >> 1) & 0b1) +
         str((reading >> 0) & 0b1))
-   
+
 
 def spiAnalysis(pathToInput, pathToOutput, clockPolarity, clockChan, csChan, mosiChan, misoChan):
 
     inputFile = open(pathToInput, "rb")
+    outputFile = open(pathToOutput, "w")
+
+    outputFile.write("**** SPI ANALYSIS ****\n\n")
 
     data = inputFile.read(2)
 
@@ -52,19 +55,23 @@ def spiAnalysis(pathToInput, pathToOutput, clockPolarity, clockChan, csChan, mos
 
         if(thisCS != lastCS):
             if(thisCS):
-                print("Trasmission found with " + str(bitsTransmit) + " bits, at time " + str(time))
-                print("Mosi: " + hex(tempMosi))
-                print("Miso: " + hex(tempMiso))
+                #print("Trasmission found with " + str(bitsTransmit) + " bits, at time " + str(time))
+                #print("Mosi: " + hex(tempMosi))
+                #print("Miso: " + hex(tempMiso))
+                outputFile.write("Trasmission found with " + str(bitsTransmit) + " bits, at time " + str(time) + "\n")
+                outputFile.write("Mosi: " + hex(tempMosi) + "\n")
+                outputFile.write("Miso: " + hex(tempMiso) + "\n")
             else:
                 bitsTransmit = 0
                 tempMosi = 0
                 tempMiso = 0
-    
+
         lastClock = thisClock
         lastCS = thisCS
         data = inputFile.read(2)
         time = time + 1
 
+    outputFile.close()
     inputFile.close()
 
 

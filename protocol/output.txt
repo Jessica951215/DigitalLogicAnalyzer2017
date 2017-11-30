@@ -1,0 +1,11 @@
+**** SPI ANALYSIS ****
+
+Trasmission found with 8 bits, at time 80
+Mosi: 0xec
+Miso: 0x85
+Trasmission found with 8 bits, at time 408
+Mosi: 0xaa
+Miso: 0x1e
+Trasmission found with 8 bits, at time 608
+Mosi: 0xa4
+Miso: 0x6c
