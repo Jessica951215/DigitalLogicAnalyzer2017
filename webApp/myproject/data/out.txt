@@ -1,0 +1,26 @@
+**** SPI ANALYSIS ****
+
+Trasmission found with 0 bits, at time 5
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 0 bits, at time 10
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 1 bits, at time 16
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 0 bits, at time 22
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 0 bits, at time 30
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 0 bits, at time 35
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 1 bits, at time 41
+Mosi: 0x0
+Miso: 0x0
+Trasmission found with 0 bits, at time 47
+Mosi: 0x0
+Miso: 0x0

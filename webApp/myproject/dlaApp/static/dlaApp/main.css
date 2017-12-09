@@ -1,26 +1,81 @@
-h1{
-	text-align: center;
-	padding-top: 20px;
-	padding-bottom: 20px;
+
+#waves {
+
+	margin-bottom: 1px;
+	padding-left: 0px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 
-
-#panel {
-	margin-left: 20px;
-
+#topbar{
+	padding-bottom: 0px;
 }
 
+#hidden{
+	width: 0px;
+	height: 0px;
+	margin-left:2000px; 
+}
+
+#panel{
+	padding-left: 0px;
+	padding-top: 0px;
+	margin-top: 0px;
+
+}
 
 #buttons{
-	margin-left: 30px;
+	margin-right: 70px;
 }
 
-#wave {
-	margin-left: 30px;
-	padding-top: 20px;
-	overflow: scroll;
+.wave {
+	padding-top: 1px;
+	padding-bottom: 1px;
+
+	margin-bottom: 1px;
+	padding-left: 0px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+
+
+
 }
+
+#allwaves{
+	padding-left: 0px;
+	padding-top: 0px;
+	width:75%;
+
+	overflow-x: scroll;
+}
+
 
 button:hover {
-    background-color: #4CAF50; /* Green */
+    background-color: #1a1aff;
 }
+
+
+#channelButton{
+	margin-bottom: 2px;
+	background-color: #c0c0c0;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+input{
+	margin-left: 10px;
+}
+
+#display_button{
+	
+	margin-left: 40%;
+	font-size: 30px;
+}
+
+#textInput{
+
+	 border: none;
+}
+

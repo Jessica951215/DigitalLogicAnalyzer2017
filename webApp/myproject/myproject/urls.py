@@ -20,5 +20,12 @@ from dlaApp import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', views.visual)
+    url(r'^home', views.visual),
+    url(r'^trigger-pattern', views.start),
+    url(r'^read-data', views.readProcessedData),
+    url(r'^render', views.visualAjax),
+    url(r'^protocol', views.startProtocol),
+    url(r'^serveFile', views.serveFile),
+
+
 ]

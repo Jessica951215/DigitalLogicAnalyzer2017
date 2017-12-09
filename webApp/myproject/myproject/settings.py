@@ -25,7 +25,7 @@ SECRET_KEY = 'fzc%y38io!=1k_g-&)th753+kizg1pil-!2xh*1zc&=ch&8v-8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["dla2.andrew.cmu.edu","128.2.58.84","127.0.0.1"]
 
 
 # Application definition
